@@ -3,53 +3,47 @@ import java.net.*;
 import java.io.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class mainserver extends Thread
 {
     protected static boolean serverContinue = true;
     protected Socket clientSocket;
 
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
+        Usuarios usuarioscadastrados[] = new Usuarios[20];
+        usuarioscadastrados[0] = new Usuarios(0,"admin","admin01","admin01@email.com", DigestUtils.md5Hex("admteste"));
         ServerSocket serverSocket = null;
-
+        BufferedReader leitorbuffer = new BufferedReader(new InputStreamReader(System.in));
+        int port = 0;
         try {
-            serverSocket = new ServerSocket(15000);
-            System.out.println ("Connection Socket Created");
+            System.out.println(" Insira a Porta de acesso do server");
+            port = Integer.parseInt(leitorbuffer.readLine());
+            serverSocket = new ServerSocket(port);
+            System.out.println("Socket de conecao criado");
             try {
-                while (serverContinue)
-                {
+                while (serverContinue) {
                     serverSocket.setSoTimeout(10000);
-                    System.out.println ("Waiting for Connection");
+                    System.out.println("Aguardando conexao...");
                     try {
-                        new mainserver (serverSocket.accept());
-                    }
-                    catch (SocketTimeoutException ste)
-                    {
-                        System.out.println ("Timeout Occurred");
+                        new mainserver(serverSocket.accept());
+                    } catch (SocketTimeoutException ste) {
+                        System.out.println("Ocorreu Timeout");
                     }
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 System.err.println("Accept failed.");
                 System.exit(1);
             }
-        }
-        catch (IOException e)
-        {
-            System.err.println("Could not listen on port: 10008.");
+        } catch (IOException e) {
+            System.err.println("Could not listen on port: " + port);
             System.exit(1);
-        }
-        finally
-        {
+        } finally {
             try {
-                System.out.println ("Closing Server Connection Socket");
+                System.out.println("Closing Server Connection Socket");
                 serverSocket.close();
-            }
-            catch (IOException e)
-            {
-                System.err.println("Could not close port: 10008.");
+            } catch (IOException e) {
+                System.err.println("Could not close port:"+port);
                 System.exit(1);
             }
         }
@@ -77,14 +71,10 @@ public class mainserver extends Thread
             {
                 System.out.println ("Server: " + inputLine);
 
-                if (inputLine.equals("?"))
-                    inputLine = "\"Bye.\" ends Client, " +
-                            "\"End Server.\" ends Server";
 
-                out.println(inputLine);
 
-                if (inputLine.equals("Bye."))
-                    break;
+
+
 
                 if (inputLine.equals("End Server."))
                     serverContinue = false;
