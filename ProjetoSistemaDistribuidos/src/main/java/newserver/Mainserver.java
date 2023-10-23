@@ -49,7 +49,7 @@ public class Mainserver extends Thread {
 
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Server: " + inputLine);
-
+                
                 if (inputLine.equals("End Server.")) {
                     serverContinue = false;
                 }

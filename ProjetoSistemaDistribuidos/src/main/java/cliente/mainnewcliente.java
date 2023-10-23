@@ -1,10 +1,11 @@
 package cliente;
 
-import java.io.*;
-import org.mindrot.jbcrypt.BCrypt;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class mainnewcliente {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args, String string) throws IOException {
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         UserInteraction userInteraction = new UserInteraction(consoleReader);
 
@@ -19,12 +20,12 @@ public class mainnewcliente {
         while ((action = userInteraction.getActionChoice()) != 0) {
             switch (action) {
                 case 1:
-                    String email = userInteraction.getEmail();
-                    String password = userInteraction.getPassword();
-                    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                    String json = "{\"action\": \"login\",\"data\": {\"email\": \"" + email + "\",\"password\": \"" + hashedPassword + "\"}}";
-                    System.out.println("Enviando JSON:\n" + json);
-                    socketManager.sendMessage(json);
+                    LoginFunc login = new LoginFunc(userInteraction, socketManager);
+                    try {
+                        login.loginrun();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 default:
                     System.out.println("Comando inválido. Insira novamente.");
