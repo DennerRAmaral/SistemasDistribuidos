@@ -1,5 +1,5 @@
 package Cliente;
-
+//Ad Astra
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -15,24 +15,22 @@ public class EchoClient {
         ObjectMapper mapper = new ObjectMapper();
         if (args.length > 0)
             serverHostname = args[0];
-        System.out.println ("Attemping to connect to host "+serverHostname);
+        System.out.println("Attemping to connect to host " + serverHostname);
 
         Socket echoSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
 
         try {
-            System.out.println("Insira a porta:");
-            int i = scan.nextInt();
-            echoSocket = new Socket(serverHostname, i);
+            echoSocket = new Socket(serverHostname, 22222);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(
                     echoSocket.getInputStream()));
         } catch (UnknownHostException e) {
-            System.err.println("host desconhecido: "+serverHostname);
+            System.err.println("host desconhecido: " + serverHostname);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to: "+serverHostname);
+            System.err.println("Couldn't get I/O for the connection to: " + serverHostname);
             System.exit(1);
         }
 
@@ -53,10 +51,10 @@ public class EchoClient {
 */
         int inputoption = -1;
 
-        while (inputoption!=0){
-        System.out.println("Insira funcao desejada:\n 1 - login");
-        inputoption = scan.nextInt();
-            switch (inputoption){
+        while (inputoption != 0) {
+            System.out.println("Insira funcao desejada:\n 1 - login");
+            inputoption = scan.nextInt();
+            switch (inputoption) {
                 case 1:
                     login(scan, mapper, in, out);
                     break;
@@ -82,7 +80,7 @@ public class EchoClient {
         System.out.println("Insira senha");
         String senha = scan.nextLine();
         LoginDados logindado = new LoginDados(email, senha);
-        String jason = "erro";
+        String jason;
         try {
             jason = mapper.writeValueAsString(logindado);
         } catch (JsonProcessingException e) {

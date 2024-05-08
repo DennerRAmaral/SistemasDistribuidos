@@ -5,7 +5,7 @@ public class LoginDados {
     private String email;
     private String senha;
 
-    LoginDados(String email, String senha){
+    LoginDados(String email, String senha) {
         this.setOperacao("login");
         this.setEmail(email);
         this.setSenha(senha);
